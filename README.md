@@ -6,16 +6,6 @@
 * optional functionality
 * ~~create UI Designs~~
 
-
-### Colors 
-* Beigh : #f6f4f0
-* Main Blue : #f6f4f0
-* Light blue : #5068aa
-* Light Light blue : #c4cadb
-* RED : #cc0000
-* Green : 
-
-
 ## Program Functionality
 ### Room management
 * Standard rooms
@@ -34,4 +24,12 @@
     *  view all rooms (Change room status, (Occupied, Needs Cleaning, Ready))
 
 ### UI Design
+#### Colors 
+* Beigh : #f6f4f0
+* Main Blue : #f6f4f0
+* Light blue : #5068aa
+* Light Light blue : #c4cadb
+* RED : #cc0000
+* Green : 
+
 ![alt text](UI.png)
