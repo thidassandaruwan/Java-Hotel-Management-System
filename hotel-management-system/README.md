@@ -23,47 +23,47 @@
     * Room Management
         * View All rooms
         * Add Modify Remove Rooms
-        * Add rooms -> Room ID, Tier
+        * Add rooms (Room ID, Tier)
     * Manage employees ( Add, remove, view, modify employees)
         * View all employees
         * Add Modify Remove Employees
 
-* Reciptionist UI
+* Receptionist UI
     * Book rooms for customers
     *  view all rooms (Change room status, (Occupied, Needs Cleaning, Ready))
 
 ### UI Design
 #### Colors 
-* Beigh : #f6f4f0
-* Main Blue : #f6f4f0
+* Beige : #f6f4f0
+* Blue : #234195
 * Light blue : #5068aa
-* Light Light blue : #c4cadb
+* Grey : #c4cadb
 * RED : #cc0000
-* Green : 
+* Green : #79c139
 
 #### LoginPage
-![Login UI page](<img/UI_design/LoginUI.png>)
+![Login UI page](UI_design/LoginUI.png)
 
 #### AdminUI - Dashboard
-![AdminUI - Dashboard](<img/UI_design/AdminUI-Dashboard.png>)
+![AdminUI - Dashboard](UI_design/AdminUI-Dashboard.png)
 
 #### AdminUI - Employees
-![AdminUI-Employees](<img/UI_design/AdminUI-Employees.png>)
+![AdminUI-Employees](UI_design/AdminUI-Employees.png)
 
 #### AdminUI - Add/Modify Employees
-![AdminUI - Add/Modify Employees](<img/UI_design/AdminUI-AddModifyEmployee.png>)
+![AdminUI - Add/Modify Employees](UI_design/AdminUI-AddModifyEmployee.png)
 
 #### AdminUI - Rooms
-![AdminUI - Rooms](<img/UI_design/AdminUI-Rooms.png>)
+![AdminUI - Rooms](UI_design/AdminUI-Rooms.png)
 
 #### AdminUI - Add/Modify Rooms
-![AdminUI - Add/Modify Rooms](<img/UI_design/AdminUI-AddModifyRooms.png>)
+![AdminUI - Add/Modify Rooms](UI_design/AdminUI-AddModifyRooms.png)
 
-#### ReciptionistUI - Rooms
-![ReciptionistUI - Rooms](<img/UI_design/ReciptionistUI-Rooms.png>)
+#### ReceptionistUI - Rooms
+![ReciptionistUI - Rooms](UI_design/ReciptionistUI-Rooms.png)
 
-#### ReciptionistUI - BookRooms
-![ReciptionistUI - BookRooms](<img/UI_design/ReciptionistUI-BookRoom.png>)
+#### ReceptionistUI - BookRooms
+![ReciptionistUI - BookRooms](UI_design/ReciptionistUI-BookRoom.png)
 
-#### ReciptionistUI - Customers
-![ReciptionistUI - Customers](<img/UI_design/ReciptionistUI-Customers.png>)
+#### ReceptionistUI - Customers
+![ReciptionistUI - Customers](UI_design/ReciptionistUI-Customers.png)
