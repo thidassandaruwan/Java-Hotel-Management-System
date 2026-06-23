@@ -40,7 +40,7 @@ out/
 # ==========================================
 # Environment Variables & Secrets
 # ==========================================
-.env
+hotel-management-system/.env
 *.env
 application-secret.properties
 credentials.json

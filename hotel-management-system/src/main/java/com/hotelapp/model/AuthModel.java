@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 public class AuthModel {
     public String validateLogin(String username, String password){
-        String sql = "SELECT * FROM Employee WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM Employee WHERE BINARY username = ? AND BINARY password = ?";
 
         try (Connection connection = DatabaseHelper.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -15,7 +15,15 @@ public class AuthModel {
 
             ResultSet result = preparedStatement.executeQuery();
 
-            return result.getString("role");
+            if (result.next())
+            {
+                return result.getString("role");
+            }
+            else
+            {
+                return null;
+            }
+
 
         } catch (Exception e) {
             System.out.println("Database Connection Error" + e.getMessage());

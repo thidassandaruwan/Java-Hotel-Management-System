@@ -1,16 +1,19 @@
 package com.hotelapp.model;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseHelper {
+    // create dotEnv object to load database login details from .env
+    private static final Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\Thidas\\IdeaProjects\\EAD_coursework\\hotel-management-system\\.env").load();
     // Aiven database "login" details
-    private static final String HOST = "mysql-personalprojects-thidas-personalprojects-thidas.h.aivencloud.com";
-    private static final String PORT = "28437";
-    private static final String DB_NAME = "hotelSystem";
-    private static final String USER = "thidas";
-    private static final String PASS = "";
+    private static final String HOST = dotenv.get("DB_HOST");
+    private static final String PORT = dotenv.get("DB_PORT");
+    private static final String DB_NAME = dotenv.get("DB_NAME");
+    private static final String USER = dotenv.get("DB_USER");
+    private static final String PASS = dotenv.get("DB_PASS");
 
     private static final String URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME + "?sslMode=REQUIRED";
 
