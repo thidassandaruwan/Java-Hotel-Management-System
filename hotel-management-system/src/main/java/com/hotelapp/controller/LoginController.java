@@ -1,6 +1,7 @@
 package com.hotelapp.controller;
 
 import com.hotelapp.model.AuthModel;
+import com.hotelapp.view.AdminUI;
 import com.hotelapp.view.BaseFrame;
 import com.hotelapp.view.LoginUI;
 
@@ -47,9 +48,9 @@ public class LoginController {
         // if user exists
         if (role != null)
         {
-            loginUI.showMessage("Welcome " + username);
             if (role.equals("Admin"))
             {
+                baseFrame.setView(new AdminUI(baseFrame, username), "Admin Dashboard");
                 // TODO:  admin dashboard
             }
             else if(role.equals("Receptionist"))

@@ -18,8 +18,7 @@ public class BaseFrame extends JFrame{
     // Jpannel to hold everything visible
     private final JPanel mainContainer;
 
-    public BaseFrame(String title){
-        setTitle("The Pearl | " + title);
+    public BaseFrame(){
         setSize(1280, 720);
         setMinimumSize(new Dimension(800, 600));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -47,12 +46,18 @@ public class BaseFrame extends JFrame{
         add(mainContainer);
     }
 
-    public void setView(JPanel newView){
+    public void setView(JPanel newView, String title){
+        // set title for the application
+        setTitle("The Pearl | " + title);
         // remove all exisitng content form the jpanel and replace with the newView
         mainContainer.removeAll();
         mainContainer.add(newView, BorderLayout.CENTER);
         // refresh the frame
         mainContainer.revalidate();
         mainContainer.repaint();
+    }
+
+    public JButton createButton(String text, Color foreground, Color background){
+        return new JButton();
     }
 }
