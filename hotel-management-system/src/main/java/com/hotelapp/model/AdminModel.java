@@ -46,20 +46,71 @@ public class AdminModel {
         return new AdminDashboardStats(0, 0, 0, 0, 0);
     }
 
-    public List<String[]> getAllEmployees() {
-        List<String[]> employeeList = new ArrayList<>();
-        String sql = "SELECT username, role FROM Employee";
+    public List<Employee> getAllEmployees() {
+        List<Employee> employeeList = new ArrayList<>();
+        // get all employees
+        String sql = "SELECT * FROM Employee";
 
         try (Connection conn = DatabaseHelper.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                employeeList.add(new String[]{ rs.getString("username"), rs.getString("role") });
+                // add employee to employeeList
+                employeeList.add(new Employee(rs.getString("username"), rs.getString("password"), rs.getString("role")));
             }
         } catch (SQLException e) {
             System.err.println("Database error handling employees: " + e.getMessage());
         }
         return employeeList;
+    }
+
+    public List<Room> getAllRooms(){
+        List<Room> rooms = new ArrayList<>();
+        // get all rooms query
+        String sql = "SELECT * FROM Room";
+        try (Connection conn = DatabaseHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                rooms.add(new Room(
+                        rs.getInt("roomId"),
+                        rs.getString("space"),
+                        rs.getString("tier"),
+                        rs.getString("status"),
+                        rs.getDouble("price")
+                ));
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error handling rooms: " + e.getMessage());
+        }
+        return rooms;
+    }
+
+    public List<CustomerRecord> getAllCustomerRecords() {
+        List<CustomerRecord> customerRecords = new ArrayList<>();
+        // get all customer records
+        String sql = "SELECT * FROM CustomerRecord";
+
+        try (Connection conn = DatabaseHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            // create customer record objects and add them to the records list
+            while (rs.next()) {
+                customerRecords.add(new CustomerRecord(
+                        rs.getInt("recordId"),
+                        rs.getString("customerName"),
+                        rs.getInt("roomId"),
+                        rs.getString("checkIn"),
+                        rs.getString("checkOut"),
+                        rs.getDouble("price")
+                ));
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error handling customer records: " + e.getMessage());
+        }
+        return customerRecords;
     }
 }

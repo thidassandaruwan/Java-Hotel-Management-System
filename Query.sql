@@ -99,13 +99,15 @@ USE hotelSystem;
 #  SELECT  SUM(price) AS total FROM CustomerRecord WHERE checkIn = CURRENT_DATE();
 #  SELECT SUM(price) AS total FROM CustomerRecord WHERE MONTH(checkIn) = MONTH(CURRENT_DATE()) AND YEAR(checkIn) = YEAR(CURRENT_DATE());
 
-SELECT
-    SUM(c.price) AS total,
-    SUM(CASE WHEN r.tier = 'Standard' AND r.space = 'Single' THEN 1 ELSE 0 END) AS standardSingle,
-    SUM(CASE WHEN r.tier = 'Standard' AND r.space = 'Double' THEN 1 ELSE 0 END) AS standardDouble,
-    SUM(CASE WHEN r.tier = 'Premium' AND r.space = 'Single' THEN 1 ELSE 0 END) AS premiumSingle,
-    SUM(CASE WHEN r.tier = 'Premium' AND r.space = 'Double' THEN 1 ELSE 0 END) AS premiumDouble
+# SELECT
+#     SUM(c.price) AS total,
+#     SUM(CASE WHEN r.tier = 'Standard' AND r.space = 'Single' THEN 1 ELSE 0 END) AS standardSingle,
+#     SUM(CASE WHEN r.tier = 'Standard' AND r.space = 'Double' THEN 1 ELSE 0 END) AS standardDouble,
+#     SUM(CASE WHEN r.tier = 'Premium' AND r.space = 'Single' THEN 1 ELSE 0 END) AS premiumSingle,
+#     SUM(CASE WHEN r.tier = 'Premium' AND r.space = 'Double' THEN 1 ELSE 0 END) AS premiumDouble
+#
+# FROM CustomerRecord c
+#          JOIN Room r ON c.roomId = r.roomId
+# WHERE MONTH(checkIn) = MONTH(CURRENT_DATE()) AND YEAR(checkIn) = YEAR(CURRENT_DATE());
 
-FROM CustomerRecord c
-         JOIN Room r ON c.roomId = r.roomId
-WHERE MONTH(checkIn) = MONTH(CURRENT_DATE()) AND YEAR(checkIn) = YEAR(CURRENT_DATE());
+SHOW TABLES ;

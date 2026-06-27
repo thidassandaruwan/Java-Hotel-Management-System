@@ -1,13 +1,10 @@
 package com.hotelapp.view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.util.List;
-import com.hotelapp.model.AdminDashboardStats;
+import com.hotelapp.model.*;
 
 
 public class AdminUI extends JPanel {
@@ -265,7 +262,7 @@ public class AdminUI extends JPanel {
     }
 
     // create employeeTab
-    public JPanel createEmployeeTab(List<String[]> employees){
+    public JPanel createEmployeeTab(List<Employee> employees){
         JPanel employeePanel = new JPanel();
         employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
 
@@ -285,9 +282,9 @@ public class AdminUI extends JPanel {
         contentPanel.setBorder(createPadding(30));
 
         // iterate to the number of employees there are
-        for (String[] employee:employees){
+        for (Employee employee:employees){
             // print employee name and role
-            contentPanel.add(createEmployeeRow(employee[0], employee[1]));
+            contentPanel.add(createEmployeeRow(employee));
             contentPanel.add(createSpace(0, 10));
         }
 
@@ -301,20 +298,20 @@ public class AdminUI extends JPanel {
         return  employeePanel;
     }
 
-    private JPanel createEmployeeRow(String empName, String empRole){
+    private JPanel createEmployeeRow(Employee employee){
         JPanel row = new JPanel(new GridLayout(1, 3, 0, 0));
         row.setBackground(baseFrame.COLOR_BEIGE);
         row.setBorder(BorderFactory.createCompoundBorder(createBorder(baseFrame.COLOR_BLUE, 2), createPadding(10)));
 
-        row.add(createLabel(empName, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(empRole, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(employee.username(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(employee.role(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
         row.add(createButton("Modify", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE));
 
         return row;
     }
 
     // create roomTab
-    public JPanel createRoomTab(){
+    public JPanel createRoomTab(List<Room> rooms){
         JPanel roomPannel = new JPanel();
         roomPannel.setLayout(new BoxLayout(roomPannel, BoxLayout.Y_AXIS));
 
@@ -335,8 +332,8 @@ public class AdminUI extends JPanel {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(createPadding(30));
 
-        for (int i = 0; i < 30; i++){
-            contentPanel.add(createRoomRow("01", "Single Bed", "Standard", "Ready"));
+        for (Room room:rooms){
+            contentPanel.add(createRoomRow(room));
             contentPanel.add(createSpace(0, 10));
         }
 
@@ -351,27 +348,27 @@ public class AdminUI extends JPanel {
     }
 
     // create room row
-    private JPanel createRoomRow(String roomId, String size, String tier, String status){
+    private JPanel createRoomRow(Room room){
         JPanel row = new JPanel(new GridLayout(1, 5, 0, 0));
         row.setBackground(baseFrame.COLOR_BEIGE);
         row.setBorder(BorderFactory.createCompoundBorder(createBorder(baseFrame.COLOR_BLUE, 2), createPadding(10)));
 
-        row.add(createLabel(roomId, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(size, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(tier, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(status, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(String.valueOf(room.roomId()), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(room.space(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(room.tier(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(room.status(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
         row.add(createButton("Modify", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE));
 
         return row;
     }
 
     // create customerTab
-    private JPanel createCustomerTab(){
+    public JPanel createCustomerTab(List<CustomerRecord> customerRecords){
         JPanel customerPanel = new JPanel();
         customerPanel.setLayout(new BoxLayout(customerPanel, BoxLayout.Y_AXIS));
 
         // add top row
-        JPanel header = new JPanel(new GridLayout(1, 5, 0, 0));
+        JPanel header = new JPanel(new GridLayout(1, 6, 0, 0));
         header.setBackground(baseFrame.COLOR_GREY);
         header.setBorder(createPadding(10));
 
@@ -380,6 +377,7 @@ public class AdminUI extends JPanel {
         header.add(createLabel("Room ID", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
         header.add(createLabel("Check-in Date", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
         header.add(createLabel("Check-out Date", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
+        header.add(createLabel("Bill", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
 
         customerPanel.add(header);
 
@@ -387,8 +385,9 @@ public class AdminUI extends JPanel {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(createPadding(30));
 
-        for (int i = 0; i < 30; i++){
-            contentPanel.add(createCustomerRow("01", "Yehan", "01", "2026-06-27", "2026-06-29"));
+        for (CustomerRecord customerRecord:customerRecords){
+            //                                  recordid, name ,    roomid,         checkin         checkOut ,  price
+            contentPanel.add(createCustomerRow(customerRecord));
             contentPanel.add(createSpace(0, 10));
         }
 
@@ -403,16 +402,17 @@ public class AdminUI extends JPanel {
     }
 
     // create customer row
-    private JPanel createCustomerRow(String id, String name, String roomId, String checkIn, String checkOut){
-        JPanel row = new JPanel(new GridLayout(1, 5, 0, 0));
+    private JPanel createCustomerRow(CustomerRecord customerRecord){
+        JPanel row = new JPanel(new GridLayout(1, 6, 0, 0));
         row.setBackground(baseFrame.COLOR_BEIGE);
         row.setBorder(BorderFactory.createCompoundBorder(createBorder(baseFrame.COLOR_BLUE, 2), createPadding(10)));
 
-        row.add(createLabel(id, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(name, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(roomId, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(checkIn, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
-        row.add(createLabel(checkOut, baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(String.valueOf(customerRecord.recordId()), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(customerRecord.custName(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(String.valueOf(customerRecord.roomId()), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(customerRecord.checkIn(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(customerRecord.checkOut(), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
+        row.add(createLabel(String.format("LKR%.2f", customerRecord.price()), baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_PLAIN));
 
         return row;
     }

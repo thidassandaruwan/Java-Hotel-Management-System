@@ -1,7 +1,6 @@
 package com.hotelapp.controller;
 
-import com.hotelapp.model.AdminModel;
-import com.hotelapp.model.AdminDashboardStats;
+import com.hotelapp.model.*;
 import com.hotelapp.view.AdminUI;
 import java.util.List;
 
@@ -20,23 +19,25 @@ public class AdminController {
     }
 
     private void setupNavigationListners(){
-        // Dashboard Tab Routing
+        // Dashboard actionlistner
         view.getDashboardButton().addActionListener(e -> syncDashboardView());
 
-        // Employees Tab Routing
+        // Employees Tab actionlistner
         view.getEmployeeButton().addActionListener(e -> {
-            List<String[]> activeEmployees = model.getAllEmployees();
-            view.updateMainPanel(view.createEmployeeTab(activeEmployees));
+            List<Employee> employees = model.getAllEmployees();
+            view.updateMainPanel(view.createEmployeeTab(employees));
         });
 
-        // Room Tab Routing Component Hooks
+        // roomButton actionlistner
         view.getRoomButton().addActionListener(e -> {
-            // Future feature insertion: update dynamically using room query patterns
+            List<Room> rooms = model.getAllRooms();
+            view.updateMainPanel(view.createRoomTab(rooms));
         });
 
-        // Customer Tab Routing Component Hooks
+        // Customer button actionlistner
         view.getCustomerButton().addActionListener(e -> {
-            // Future feature insertion: update dynamically using booking logs query patterns
+            List<CustomerRecord> customerRecords = model.getAllCustomerRecords();
+            view.updateMainPanel(view.createCustomerTab(customerRecords));
         });
     }
 
