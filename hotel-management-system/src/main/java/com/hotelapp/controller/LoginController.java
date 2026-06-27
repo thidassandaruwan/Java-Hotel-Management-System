@@ -1,6 +1,7 @@
 package com.hotelapp.controller;
 
 import com.hotelapp.model.AuthModel;
+import com.hotelapp.model.AdminModel;
 import com.hotelapp.view.AdminUI;
 import com.hotelapp.view.BaseFrame;
 import com.hotelapp.view.LoginUI;
@@ -50,8 +51,11 @@ public class LoginController {
         {
             if (role.equals("Admin"))
             {
-                baseFrame.setView(new AdminUI(baseFrame, username), "Admin Dashboard");
-                // TODO:  admin dashboard
+                AdminUI adminView = new AdminUI(baseFrame, username);
+                AdminModel adminModel = new AdminModel();
+                new AdminController(adminView, adminModel); // Attaches the listeners
+
+                baseFrame.setView(adminView, "Admin Dashboard");
             }
             else if(role.equals("Receptionist"))
             {

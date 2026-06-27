@@ -1,11 +1,14 @@
 package com.hotelapp.view;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.util.List;
+import com.hotelapp.model.AdminDashboardStats;
+
 
 public class AdminUI extends JPanel {
     // ui related
@@ -13,18 +16,27 @@ public class AdminUI extends JPanel {
     private final String adminName;
 
     // functionality related componenets
+    private JButton dashboardButton;
+    private JButton employeeButton;
+    private JButton roomButton;
+    private JButton customerButton;
+
     // mainpannel
     private JPanel mainPanel;
 
     // Dashboard
     private JButton todayReportButton;
-    private JLabel todayStRoomsLbl;
-    private JLabel todayPrRoomsLbl;
+    private JLabel todaySingleStRoomsLbl;
+    private JLabel todaySinglePrRoomsLbl;
+    private JLabel todayDoubleStRoomsLbl;
+    private JLabel todayDoublePrRoomsLbl;
     private JLabel todayTotalLbl;
 
     private JButton monthlyReportButton;
-    private JLabel monthlyStRoomsLbl;
-    private JLabel monthlyPrRoomsLbl;
+    private JLabel monthlySingleStRoomsLbl;
+    private JLabel monthlySinglePrRoomsLbl;
+    private JLabel monthlyDoubleStRoomsLbl;
+    private JLabel monthlyDoublePrRoomsLbl;
     private JLabel monthlyTotalLbl;
 
     // functionality realted
@@ -82,54 +94,10 @@ public class AdminUI extends JPanel {
         sidePannel.add(createSpace(0, 50));
 
         // create navigation buttons
-        JButton dashboardButton = createButton("Dashboard", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
-        // set load new ui functionality
-        dashboardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainPanel.removeAll();
-                mainPanel.revalidate();
-                mainPanel.add(createDashboard(), BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
-            }
-        });
-
-        JButton employeeButton = createButton("Employees", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
-        employeeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainPanel.removeAll();
-                mainPanel.revalidate();
-                mainPanel.add(createEmployeeTab(), BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
-            }
-        });
-
-        JButton roomButton = createButton("Rooms", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
-        roomButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainPanel.removeAll();
-                mainPanel.revalidate();
-                mainPanel.add(createRoomTab(), BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
-            }
-        });
-
-        JButton customerButton = createButton("Customers", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
-        customerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainPanel.removeAll();
-                mainPanel.revalidate();
-                mainPanel.add(createCustomerTab(), BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
-            }
-        });
+        dashboardButton = createButton("Dashboard", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
+        employeeButton = createButton("Employees", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
+        roomButton = createButton("Rooms", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
+        customerButton = createButton("Customers", baseFrame.COLOR_BEIGE, baseFrame.COLOR_BLUE);
 
         sidePannel.add(dashboardButton);
         sidePannel.add(employeeButton);
@@ -143,12 +111,11 @@ public class AdminUI extends JPanel {
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(baseFrame.COLOR_BEIGE);
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(createDashboard(), BorderLayout.CENTER);
         return mainPanel;
     }
 
     // create dashboard
-    private JPanel createDashboard(){
+    public JPanel createDashboard(){
         JPanel dashboard = new JPanel();
         dashboard.setLayout(new GridLayout(1, 2, 30, 0));
         dashboard.setBackground(baseFrame.COLOR_BEIGE);
@@ -185,21 +152,30 @@ public class AdminUI extends JPanel {
         topRow.add(this.todayReportButton);
 
         card.add(topRow);
+        card.add(createSpace(0, 10));
 
         // seperate pannel for rest of the data in the card
-        JPanel contentArea = new JPanel(new GridLayout(3, 1, 0, 20));
+        JPanel contentArea = new JPanel(new GridLayout(5, 1, 0, 20));
+        contentArea.setBackground(baseFrame.COLOR_BEIGE);
+        contentArea.setBorder(BorderFactory.createCompoundBorder(createBorder(baseFrame.COLOR_BEIGE, 2), createPadding(10)));
         contentArea.setOpaque(false);
-        // add standard room
-        this.todayStRoomsLbl = createLabel("300", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
-        contentArea.add(createInfoLabelRow(createLabel("Standard Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todayStRoomsLbl));
 
+        // add single standard rooms
+        this.todaySingleStRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Standard Single Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todaySingleStRoomsLbl));
+        // add double standard rooms
+        this.todayDoubleStRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Standard Double Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todayDoubleStRoomsLbl));
 
-        // add premium room row
-        this.todayPrRoomsLbl = createLabel("300", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
-        contentArea.add(createInfoLabelRow(createLabel("Premium Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todayPrRoomsLbl));
+        // add single premium room
+        this.todaySinglePrRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Premium Single Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todaySinglePrRoomsLbl));
+        // add double premium room
+        this.todayDoublePrRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Premium Double Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todayDoublePrRoomsLbl));
 
         // add total row
-        this.todayTotalLbl = createLabel("30s00000", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        this.todayTotalLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
         contentArea.add(createInfoLabelRow(createLabel("Total", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.todayTotalLbl));
 
         card.add(contentArea);
@@ -230,21 +206,29 @@ public class AdminUI extends JPanel {
         topRow.add(this.monthlyReportButton);
 
         card.add(topRow);
+        card.add(createSpace(0, 10));
 
         // seperate pannel for rest of the data in the card
-        JPanel contentArea = new JPanel(new GridLayout(3, 1, 0, 20));
+        JPanel contentArea = new JPanel(new GridLayout(5, 1, 0, 20));
+        contentArea.setBorder(BorderFactory.createCompoundBorder(createBorder(baseFrame.COLOR_BEIGE, 2), createPadding(10)));
         contentArea.setOpaque(false);
-        // add standard room
-        this.monthlyStRoomsLbl = createLabel("300", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
-        contentArea.add(createInfoLabelRow(createLabel("Standard Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlyStRoomsLbl));
 
+        // add single standard room
+        this.monthlySingleStRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Standard Single Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlySingleStRoomsLbl));
+        // add Double standard room
+        this.monthlyDoubleStRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Standard Double Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlyDoubleStRoomsLbl));
 
-        // add premium room row
-        this.monthlyPrRoomsLbl = createLabel("300", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
-        contentArea.add(createInfoLabelRow(createLabel("Premium Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlyPrRoomsLbl));
+        // add single preimum room
+        this.monthlySinglePrRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Premium Single Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlySinglePrRoomsLbl));
+        // add double premium room
+        this.monthlyDoublePrRoomsLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        contentArea.add(createInfoLabelRow(createLabel("Premium Double Rooms", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlyDoublePrRoomsLbl));
 
         // add total row
-        this.monthlyTotalLbl = createLabel("30s00000", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
+        this.monthlyTotalLbl = createLabel("", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN);
         contentArea.add(createInfoLabelRow(createLabel("Total", baseFrame.COLOR_BEIGE, baseFrame.FONT_SERIF_PLAIN), this.monthlyTotalLbl));
 
         card.add(contentArea);
@@ -258,12 +242,30 @@ public class AdminUI extends JPanel {
         infoRow.setOpaque(false);
         infoRow.add(lbl1);
         infoRow.add(lbl2);
+        infoRow.setBorder(BorderFactory.createCompoundBorder(createBorder(baseFrame.COLOR_BEIGE, 2), createPadding(10)));
 
         return infoRow;
     }
 
+    // update dashboard metrics
+    public void updateDashboardMetrics(AdminDashboardStats dailyStats, AdminDashboardStats monthlyStats){
+        // Update Today Metrics
+        this.todaySingleStRoomsLbl.setText(String.valueOf(dailyStats.standardSingle()));
+        this.todayDoubleStRoomsLbl.setText(String.valueOf(dailyStats.standardDouble()));
+        this.todaySinglePrRoomsLbl.setText(String.valueOf(dailyStats.premiumSingle()));
+        this.todayDoublePrRoomsLbl.setText(String.valueOf(dailyStats.premiumDouble()));
+        this.todayTotalLbl.setText(String.format("LKR%.2f", dailyStats.totalRevenue()));
+
+        // Update Monthly Metrics
+        this.monthlySingleStRoomsLbl.setText(String.valueOf(monthlyStats.standardSingle()));
+        this.monthlyDoubleStRoomsLbl.setText(String.valueOf(monthlyStats.standardDouble()));
+        this.monthlySinglePrRoomsLbl.setText(String.valueOf(monthlyStats.premiumSingle()));
+        this.monthlyDoublePrRoomsLbl.setText(String.valueOf(monthlyStats.premiumDouble()));
+        this.monthlyTotalLbl.setText(String.format("LKR%.2f", monthlyStats.totalRevenue()));
+    }
+
     // create employeeTab
-    private JPanel createEmployeeTab(){
+    public JPanel createEmployeeTab(List<String[]> employees){
         JPanel employeePanel = new JPanel();
         employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
 
@@ -282,8 +284,10 @@ public class AdminUI extends JPanel {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(createPadding(30));
 
-        for (int i = 0; i < 30; i++){
-            contentPanel.add(createEmployeeRow("Thidas", "Admin"));
+        // iterate to the number of employees there are
+        for (String[] employee:employees){
+            // print employee name and role
+            contentPanel.add(createEmployeeRow(employee[0], employee[1]));
             contentPanel.add(createSpace(0, 10));
         }
 
@@ -310,7 +314,7 @@ public class AdminUI extends JPanel {
     }
 
     // create roomTab
-    private JPanel createRoomTab(){
+    public JPanel createRoomTab(){
         JPanel roomPannel = new JPanel();
         roomPannel.setLayout(new BoxLayout(roomPannel, BoxLayout.Y_AXIS));
 
@@ -375,7 +379,7 @@ public class AdminUI extends JPanel {
         header.add(createLabel("Customer Name", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
         header.add(createLabel("Room ID", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
         header.add(createLabel("Check-in Date", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
-        header.add(createLabel("Check-in Date", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
+        header.add(createLabel("Check-out Date", baseFrame.COLOR_BLUE, baseFrame.FONT_SERIF_BOLD));
 
         customerPanel.add(header);
 
@@ -465,6 +469,19 @@ public class AdminUI extends JPanel {
         return label;
     }
 
+    // update MainPanel
+    public void updateMainPanel(JPanel newView){
+        mainPanel.removeAll();
+        mainPanel.add(newView, BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
     // TODO getters for components
+    public JButton getDashboardButton(){return  this.dashboardButton;}
+    public JButton getEmployeeButton(){return this.employeeButton;}
+    public JButton getRoomButton(){return this.roomButton;}
+    public JButton getCustomerButton(){return this.customerButton;}
+
     // TODO getters for values
 }
