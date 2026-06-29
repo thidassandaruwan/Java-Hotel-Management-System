@@ -772,7 +772,7 @@ public class AdminUI extends JPanel {
         contentPanel.setBorder(UIFactory.createPadding(30));
 
         for (CustomerRecord customerRecord:customerRecords){
-            //                                  recordid, name ,    roomid,         checkin         checkOut ,  price
+            // recordid, name ,    roomid,         checkin         checkOut ,  price
             contentPanel.add(createCustomerRow(customerRecord));
             contentPanel.add(UIFactory.createSpace(0, 10));
         }
