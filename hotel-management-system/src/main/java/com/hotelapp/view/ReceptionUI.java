@@ -2,6 +2,8 @@ package com.hotelapp.view;
 
 import java.awt.*;
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -445,10 +447,23 @@ public class ReceptionUI extends JPanel{
         bookingPageCheckOutField.setEditable(false);
         formPanel.add(createBookInputElement("Check Out Date", bookingPageCheckOutField));
 
+        // get the dates and convert to real dates
+        LocalDate checkIn = LocalDate.parse(bookingFormInfo.checkInDate());
+        LocalDate checkOut = LocalDate.parse(bookingFormInfo.checkOutDate());
+        // check the number of days
+        long numberOfDays = ChronoUnit.DAYS.between(checkIn, checkOut);
+        // if the checkin and checkout is the same day and "numberOfDays" is 0 set number of days to one
+        numberOfDays = (numberOfDays <= 0) ? 1 : numberOfDays;
+
+        JTextField numberOfDaysFiled = new JTextField(20);
+        UIFactory.styleTextField(numberOfDaysFiled);
+        numberOfDaysFiled.setText(String.valueOf(numberOfDays));
+        numberOfDaysFiled.setEditable(false);
+        formPanel.add(createBookInputElement("Days", numberOfDaysFiled));
+
         bookingPagePriceField = new JTextField(20);
         UIFactory.styleTextField(bookingPagePriceField);
-        // TODO set price
-        bookingPagePriceField.setText(String.format("LKR%.2f"));
+        bookingPagePriceField.setText(String.format("LKR %.2f", (numberOfDays * bookingFormInfo.roomPrice())));
         bookingPagePriceField.setEditable(false);
         formPanel.add(createBookInputElement("Total", bookingPagePriceField));
 
