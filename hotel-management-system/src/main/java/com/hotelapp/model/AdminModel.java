@@ -86,24 +86,33 @@ public class AdminModel {
         }
     }
 
-    // Insert a new employee into the database
-    public boolean addRoom(Room newRoom) {
-        String sql = "INSERT INTO Room (space, tier, status, price) VALUES (?, ?, ?, ?)";
-
+    // update employee
+    public boolean updateEmployee(Employee employee) {
+        String sql = "UPDATE Employee SET password = ?, role = ? WHERE username = ?";
         try (Connection conn = DatabaseHelper.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, newRoom.space());
-            pstmt.setString(2, newRoom.tier());
-            pstmt.setString(3, "Ready");
-            pstmt.setDouble(4, newRoom.price());
+            pstmt.setString(1, employee.password());
+            pstmt.setString(2, employee.role());
+            pstmt.setString(3, employee.username());
 
-            int rowsAffected = pstmt.executeUpdate();
-            // Returns true if the insert was successful
-            return (rowsAffected > 0);
-
+            return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error adding room: " + e.getMessage());
+            System.err.println("Error updating employee: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // remove employee
+    public boolean deleteEmployee(String username) {
+        String sql = "DELETE FROM Employee WHERE username = ?";
+        try (Connection conn = DatabaseHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error deleting employee: " + e.getMessage());
             return false;
         }
     }
@@ -131,6 +140,62 @@ public class AdminModel {
         return rooms;
     }
 
+    // Insert a new room into the database
+    public boolean addRoom(Room newRoom) {
+        String sql = "INSERT INTO Room (space, tier, status, price) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, newRoom.space());
+            pstmt.setString(2, newRoom.tier());
+            pstmt.setString(3, "Ready");
+            pstmt.setDouble(4, newRoom.price());
+
+            int rowsAffected = pstmt.executeUpdate();
+            // Returns true if the insert was successful
+            return (rowsAffected > 0);
+
+        } catch (SQLException e) {
+            System.err.println("Error adding room: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // update room
+    public boolean updateRoom(Room room) {
+        String sql = "UPDATE Room SET space = ?, tier = ?, status = ?, price = ? WHERE roomId = ?";
+        try (Connection conn = DatabaseHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, room.space());
+            pstmt.setString(2, room.tier());
+            pstmt.setString(3, room.status());
+            pstmt.setDouble(4, room.price());
+            pstmt.setInt(5, room.roomId());
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating room: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // remove room
+    public boolean deleteRoom(int roomId) {
+        String sql = "DELETE FROM Room WHERE roomId = ?";
+        try (Connection conn = DatabaseHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, roomId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error deleting room: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // get all cusotemr records
     public List<CustomerRecord> getAllCustomerRecords() {
         List<CustomerRecord> customerRecords = new ArrayList<>();
         // get all customer records

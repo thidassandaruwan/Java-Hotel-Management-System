@@ -58,12 +58,28 @@ public class AdminController {
     }
 
     private void setupEmployeeTabNavigationListeners(){
-        if (view.getNewEmployeeTabBtn() != null) {
+        if (view.getNewEmployeeTabBtn() != null){
             view.getNewEmployeeTabBtn().addActionListener(e -> {
                 view.updateMainPanel(view.createNewEmployeeTab());
                 // once new employee tab opens, add the action listenrs to those buttons
                 setupNewEmployeeFormListeners();
             });
+        }
+
+        if (view.getEditEmployeeBtns() != null){
+            for (JButton editButton:view.getEditEmployeeBtns()){
+                editButton.addActionListener(e -> {
+                    // get the clicked button
+                    JButton clickedButton = (JButton) e.getSource();
+                    // get the employee object stored inside the clickedbutton ( the object is in a commom object form, hence the Employee casting)
+                    Employee selectedEmployee = (Employee) clickedButton.getClientProperty("employeeData");
+
+                    // create the edit employee page
+                    view.updateMainPanel(view.createEditEmployeeTab(selectedEmployee));
+                    // setup editemployee form button functionality
+                    setupEditEmployeeFormListeners();
+                });
+            }
         }
     }
 
@@ -111,6 +127,59 @@ public class AdminController {
         });
     }
 
+    private void setupEditEmployeeFormListeners() {
+        // go back button
+        view.getBackToEmployeesBtn().addActionListener(e -> {
+            view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
+            setupEmployeeTabNavigationListeners();
+        });
+
+        // save employee
+        view.getSaveEditEmployeeBtn().addActionListener(e -> {
+            String username = view.getEditEmpUsernameField().getText();
+            String password = view.getEditEmpPasswordField().getText().trim();
+            String role = view.getEditEmpRoleField().getSelectedItem().toString();
+
+            if (!password.isEmpty()) {
+                if (password.contains(" ")) {
+                    JOptionPane.showMessageDialog(null, "No spaces allowed in password.");
+                    return;
+                }
+
+                Employee updatedEmp = new Employee(username, password, role);
+                if (model.updateEmployee(updatedEmp)) {
+                    JOptionPane.showMessageDialog(null, "Employee updated successfully!");
+                    view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
+                    setupEmployeeTabNavigationListeners();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error updating employee.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Password cannot be empty.");
+            }
+        });
+
+        // remove Employee
+        view.getRemoveEmployeeBtn().addActionListener(e -> {
+            String username = view.getEditEmpUsernameField().getText();
+
+            // Add a confirmation dialog before deleting!
+            int confirm = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to permanently delete " + username + "?",
+                    "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (model.deleteEmployee(username)) {
+                    JOptionPane.showMessageDialog(null, "Employee removed.");
+                    view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
+                    setupEmployeeTabNavigationListeners();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error removing employee.");
+                }
+            }
+        });
+    }
+
     // room actionlisteners
     private void setupRoomTabNavigationListeners(){
         if (view.getNewRoomTabBtn() != null) {
@@ -120,13 +189,29 @@ public class AdminController {
                 setupNewRoomFormActionListeners();
             });
         }
+
+        if (view.getEditRoomBtns() != null){
+            for (JButton editButton:view.getEditRoomBtns()){
+                editButton.addActionListener(e -> {
+                    // get the clicked button
+                    JButton clickedButton = (JButton) e.getSource();
+                    // get the room object stored inside the clickedbutton ( the object is in a commom object form, hence the Employee casting)
+                    Room selectedRoom = (Room) clickedButton.getClientProperty("roomData");
+
+                    // create the edit room page
+                    view.updateMainPanel(view.createEditRoomTab(selectedRoom));
+                    // implement editroom form buttons funcionality
+                    setupEditRoomFormListeners();
+                });
+            }
+        }
     }
 
     private void setupNewRoomFormActionListeners(){
         view.getBackToRoomBtn().addActionListener(e -> {
             view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
             // rebind the navigation buttons in employee tab
-            setupEmployeeTabNavigationListeners();
+            setupEditRoomFormListeners();
         });
 
         // adding new rooms
@@ -166,6 +251,61 @@ public class AdminController {
             else
             {
                 JOptionPane.showMessageDialog(null, "Please fill out all fields.");
+            }
+        });
+    }
+
+    private void setupEditRoomFormListeners() {
+        // go back actionlisner
+        view.getBackToRoomBtn().addActionListener(e -> {
+            view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
+            setupRoomTabNavigationListeners();
+        });
+
+        // save room button
+        view.getSaveEditRoomBtn().addActionListener(e -> {
+            int roomId = Integer.parseInt(view.getEditRoomIdField().getText());
+            String tier = view.getEditRoomTierField().getSelectedItem().toString();
+            String space = view.getEditRoomSpaceField().getSelectedItem().toString();
+            String status = view.getEditRoomStatusField().getSelectedItem().toString();
+            String priceString = view.getEditRoomPriceField().getText().trim();
+
+            if (!priceString.isEmpty()) {
+                try {
+                    double price = Double.parseDouble(priceString);
+                    Room updatedRoom = new Room(roomId, space, tier, status, price);
+
+                    if (model.updateRoom(updatedRoom)) {
+                        JOptionPane.showMessageDialog(null, "Room updated successfully!");
+                        view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
+                        setupRoomTabNavigationListeners();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error updating room.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for the price.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Price cannot be empty.");
+            }
+        });
+
+        // remove room button
+        view.getRemoveRoomBtn().addActionListener(e -> {
+            int roomId = Integer.parseInt(view.getEditRoomIdField().getText());
+
+            int confirm = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to permanently delete Room ID " + roomId + "?",
+                    "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (model.deleteRoom(roomId)) {
+                    JOptionPane.showMessageDialog(null, "Room removed.");
+                    view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
+                    setupRoomTabNavigationListeners();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error: Cannot remove a room that has customer records associated with it.");
+                }
             }
         });
     }

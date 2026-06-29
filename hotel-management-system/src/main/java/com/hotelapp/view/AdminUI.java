@@ -2,83 +2,93 @@ package com.hotelapp.view;
 
 import java.awt.*;
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 import com.hotelapp.model.*;
 import com.hotelapp.util.*;
 
 
 public class AdminUI extends JPanel {
-    // ui related
-    private final BaseFrame baseFrame;
+    // admin name to display the sidebar
     private final String adminName;
 
-    // functionality related componenets
+    // sidepannel navigation buttons
     private JButton dashboardButton;
     private JButton employeeButton;
     private JButton roomButton;
     private JButton customerButton;
 
     // mainpannel
-    private JPanel mainPanel;
+    private final JPanel mainPanel;
 
     // Dashboard
-    private JButton todayReportButton;
+    private JButton todayReportBtn;
     private JLabel todaySingleStRoomsLbl;
     private JLabel todaySinglePrRoomsLbl;
     private JLabel todayDoubleStRoomsLbl;
     private JLabel todayDoublePrRoomsLbl;
     private JLabel todayTotalLbl;
 
-    private JButton monthlyReportButton;
+    private JButton monthlyReportBtn;
     private JLabel monthlySingleStRoomsLbl;
     private JLabel monthlySinglePrRoomsLbl;
     private JLabel monthlyDoubleStRoomsLbl;
     private JLabel monthlyDoublePrRoomsLbl;
     private JLabel monthlyTotalLbl;
 
-    // Employee realted
+    // Employee tab realted
+    //  employee search funcitonality realted
+    private JTextField empNameSearchField;
+    private JButton empSearchButton;
+    private JComboBox<String> empRoleFilter;
+    private JButton empFilterButton;
     // new employee
     private JButton newEmployeeTabBtn;
-    private JButton saveNewEmployeeBtn; // The submit button on the form
-    private JButton backToEmployeesBtn; // The go back button
+    private JButton saveNewEmployeeBtn;
+    private JButton backToEmployeesBtn;
     private JTextField newEmpUsernameField;
     private JTextField newEmpPasswordField;
     private JComboBox<String> newEmpRoleField;
     // edit employee
-    private JButton editEmployeeTabBtn;
+    private List<JButton> editEmployeeBtns;
     private JButton saveEditEmployeeBtn;
     private JButton removeEmployeeBtn;
     private JTextField editEmpUsernameField;
     private JTextField editEmpPasswordField;
     private JComboBox<String> editEmpRoleField;
 
-    // Room related
+    // Room tab related
+    // room search funcitonality realted
+    private JTextField roomIdSearchField;
+    private JButton roomSearchButton;
+    private JComboBox<String> roomTierFilter;
+    private JComboBox<String> roomSpaceFilter;
+    private JComboBox<String> roomStatusFilter;
+    private JButton roomFilterButton;
     // new room
     private JButton newRoomTabBtn;
-    private JButton saveNewRoomBtn; // The submit button on the form
-    private JButton backToRoomBtn; // The go back button
+    private JButton saveNewRoomBtn;
+    private JButton backToRoomBtn;
     private JComboBox<String> newRoomTierField;
     private JComboBox<String> newRoomSpaceField;
     private JTextField newRoomPriceField;
     // edit room
-    private JButton editRoomTabBtn;
+    private List<JButton> editRoomBtns;
     private JButton saveEditRoomBtn;
     private JButton removeRoomBtn;
+    private JTextField editRoomIdField;
     private JComboBox<String> editRoomTierField;
     private JComboBox<String> editRoomSpaceField;
     private JComboBox<String> editRoomStatusField;
     private JTextField editRoomPriceField;
 
-    // customer record related
+    // customerRecord tab related
+    // customerRecord search funcitonality realted
+    private JTextField custSearchField;
+    private JComboBox<String> customerSearchTypeField;
+    private JButton customerSearchButton;
 
-    // functionality realted
-    private record dashboardStats(double standardRooms, double premiumRooms, double total){}
-    //dashboard
-    private dashboardStats dailyStats;
-    private dashboardStats monthlySats;
-
-    public AdminUI(BaseFrame baseFrame, String adminName) {
-        this.baseFrame = baseFrame;
+    public AdminUI(String adminName) {
         this.adminName = adminName;
 
         // set windows layout
@@ -179,9 +189,9 @@ public class AdminUI extends JPanel {
         timeFrame.setHorizontalAlignment(SwingConstants.CENTER);
         topRow.add(timeFrame);
         // add genrate report
-        this.todayReportButton = UIFactory.createButton("Generate Report", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
-        todayReportButton.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
-        topRow.add(this.todayReportButton);
+        this.todayReportBtn = UIFactory.createButton("Generate Report", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        todayReportBtn.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
+        topRow.add(this.todayReportBtn);
 
         card.add(topRow);
         card.add(UIFactory.createSpace(0, 10));
@@ -233,9 +243,9 @@ public class AdminUI extends JPanel {
         timeFrame.setHorizontalAlignment(SwingConstants.CENTER);
         topRow.add(timeFrame);
         // add genrate report
-        this.monthlyReportButton = UIFactory.createButton("Generate Report", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
-        monthlyReportButton.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
-        topRow.add(this.monthlyReportButton);
+        this.monthlyReportBtn = UIFactory.createButton("Generate Report", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        monthlyReportBtn.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
+        topRow.add(this.monthlyReportBtn);
 
         card.add(topRow);
         card.add(UIFactory.createSpace(0, 10));
@@ -298,10 +308,41 @@ public class AdminUI extends JPanel {
 
     // create employeeTab
     public JPanel createEmployeeTab(List<Employee> employees){
+        // refresh the modifyEmpButtons (because if the employee tab is opened multiple times, the previous data might be outdated
+        this.editEmployeeBtns = new ArrayList<>();
+
         JPanel employeePanel = new JPanel();
         employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
 
-        // add top row
+        // add filter / search row
+        JPanel searchPanel = new JPanel(new GridLayout(1, 9, 5, 0));
+        searchPanel.setBorder(UIFactory.createPadding(5));
+        searchPanel.setBackground(Theme.COLOR_BEIGE);
+        // add search
+        empNameSearchField = new JTextField(20);
+        UIFactory.styleTextField(empNameSearchField);
+        empNameSearchField.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(empNameSearchField);
+        // add searchbutton
+        empSearchButton = UIFactory.createButton("Search", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        empSearchButton.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(empSearchButton);
+        // create space between filter and search
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        // add filter
+        empRoleFilter = UIFactory.createComboBox(new String[]{"Any", "Receptionist", "Admin"});
+        empRoleFilter.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(empRoleFilter);
+        // add filterButton
+        empFilterButton = UIFactory.createButton("Filter", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        empFilterButton.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(empFilterButton);
+
+        // add heders row
         JPanel header = new JPanel(new GridLayout(1, 3, 0, 0));
         header.setBackground(Theme.COLOR_GREY);
         header.setBorder(UIFactory.createPadding(10));
@@ -312,6 +353,7 @@ public class AdminUI extends JPanel {
         header.add(this.newEmployeeTabBtn);
 
         employeePanel.add(header);
+        employeePanel.add(searchPanel);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -341,17 +383,19 @@ public class AdminUI extends JPanel {
 
         row.add(UIFactory.createLabel(employee.username(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(employee.role(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
-        row.add(UIFactory.createButton("Modify", Theme.COLOR_BEIGE, Theme.COLOR_BLUE));
+
+        JButton editEmployeeBtn = UIFactory.createButton("Edit", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        // store the current employee Object inside the button, so that we can refer to each employee by each button
+        editEmployeeBtn.putClientProperty("employeeData", employee);
+        // add each button to editempbtn list
+        this.editEmployeeBtns.add(editEmployeeBtn);
+        row.add(editEmployeeBtn);
 
         return row;
     }
 
     // new Employee tab
     public JPanel createNewEmployeeTab(){
-        // layout and bgColor for the main pannel
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        setBackground(Theme.COLOR_BEIGE);
-
         //sub jpannel with the login UI
         JPanel newEmpPanel = new JPanel();
         newEmpPanel.setLayout(new GridLayout(12, 1, 0, 0));
@@ -402,10 +446,108 @@ public class AdminUI extends JPanel {
         return newEmpPanel;
     }
 
+    // edit Room tab
+    public JPanel createEditEmployeeTab(Employee employee){
+        JPanel editEmployeePanel = new JPanel(new GridLayout(16, 1, 0, 0));
+        editEmployeePanel.setBackground(Theme.COLOR_BEIGE);
+        editEmployeePanel.setBorder(UIFactory.createPadding(30));
+
+        // USERNAME
+        //label
+        editEmployeePanel.add(UIFactory.createLabel("Username: ", Color.BLACK, Theme.FONT_SERIF_BOLD));
+        //inputField
+        editEmpUsernameField = new JTextField(20);
+        UIFactory.styleTextField(editEmpUsernameField);
+        editEmpUsernameField.setText(employee.username());
+        editEmpUsernameField.setEditable(false);
+        editEmployeePanel.add(editEmpUsernameField);
+
+        // create whitespace in between
+        editEmployeePanel.add(UIFactory.createSpace(0, 20));
+
+        // PASSWORD
+        //label
+        editEmployeePanel.add(UIFactory.createLabel("Password: ", Color.black, Theme.FONT_SERIF_BOLD));
+        //inputField
+        editEmpPasswordField = new JTextField(20);
+        UIFactory.styleTextField(editEmpPasswordField);
+        editEmpPasswordField.setText(employee.password());
+        editEmployeePanel.add(editEmpPasswordField);
+
+        // create whitespace in between
+        editEmployeePanel.add(UIFactory.createSpace(0, 20));
+
+        // Role
+        //label
+        editEmployeePanel.add(UIFactory.createLabel("Role: ", Color.black, Theme.FONT_SERIF_BOLD));
+        //combobox options
+        editEmpRoleField = UIFactory.createComboBox(new String[]{"Receptionist", "Admin"});
+        editEmpRoleField.setSelectedItem(employee.role());
+        editEmployeePanel.add(editEmpRoleField);
+
+        // buttons
+        // create whitespace in between
+        editEmployeePanel.add(UIFactory.createSpace(0, 10));
+
+        saveEditEmployeeBtn = UIFactory.createButton("Save Employee", Theme.COLOR_BEIGE, Theme.COLOR_GREEN);
+        editEmployeePanel.add(saveEditEmployeeBtn);
+
+        // create whitespace in between
+        editEmployeePanel.add(UIFactory.createSpace(0, 20));
+
+        removeEmployeeBtn = UIFactory.createButton("Remove Employee", Theme.COLOR_BEIGE, Theme.COLOR_RED);
+        editEmployeePanel.add(removeEmployeeBtn);
+
+        // create whitespace in between
+        editEmployeePanel.add(UIFactory.createSpace(0, 10));
+
+        backToEmployeesBtn = UIFactory.createButton("Go Back", Theme.COLOR_RED, Theme.COLOR_BEIGE);
+        editEmployeePanel.add(backToEmployeesBtn);
+
+        return editEmployeePanel;
+    }
+
     // create roomTab
     public JPanel createRoomTab(List<Room> rooms){
+        // refresh the edit room button list when the room tab loads
+        this.editRoomBtns = new ArrayList<>();
+
         JPanel roomPannel = new JPanel();
         roomPannel.setLayout(new BoxLayout(roomPannel, BoxLayout.Y_AXIS));
+
+        // add filter / search row
+        JPanel searchPanel = new JPanel(new GridLayout(1, 9, 5, 0));
+        searchPanel.setBorder(UIFactory.createPadding(5));
+        searchPanel.setBackground(Theme.COLOR_BEIGE);
+        // add search
+        roomIdSearchField = new JTextField(20);
+        UIFactory.styleTextField(roomIdSearchField);
+        roomIdSearchField.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(roomIdSearchField);
+        // add searchbutton
+        roomSearchButton = UIFactory.createButton("Search", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        roomSearchButton.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(roomSearchButton);
+        // create space between filter and search
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        // tier filter
+        roomTierFilter = UIFactory.createComboBox(new String[]{"Any", "Standard", "Premium"});
+        roomTierFilter.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(roomTierFilter);
+        // space filter
+        roomSpaceFilter = UIFactory.createComboBox(new String[]{"Any", "Single", "Double"});
+        roomSpaceFilter.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(roomSpaceFilter);
+        // status filter
+        roomStatusFilter = UIFactory.createComboBox(new String[]{"Any", "Ready", "Booked", "Need Cleaning", "Maintenance"});
+        roomStatusFilter.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(roomStatusFilter);
+        // add filterButton
+        roomFilterButton = UIFactory.createButton("Filter", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        roomFilterButton.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(roomFilterButton);
 
         // add top row
         JPanel header = new JPanel(new GridLayout(1, 5, 0, 0));
@@ -420,6 +562,7 @@ public class AdminUI extends JPanel {
         header.add(this.newRoomTabBtn);
 
         roomPannel.add(header);
+        roomPannel.add(searchPanel);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -450,17 +593,20 @@ public class AdminUI extends JPanel {
         row.add(UIFactory.createLabel(room.space(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(room.tier(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(room.status(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
-        row.add(UIFactory.createButton("Modify", Theme.COLOR_BEIGE, Theme.COLOR_BLUE));
+
+        JButton editRoomBtn = UIFactory.createButton("Edit", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        // put each room object in each edit room button
+        editRoomBtn.putClientProperty("roomData", room);
+        // add the editroom btn to the editroom button list
+        this.editRoomBtns.add(editRoomBtn);
+
+        row.add(editRoomBtn);
 
         return row;
     }
 
-    // new Employee tab
+    // new Room tab
     public JPanel createNewRoomTab(){
-        // layout and bgColor for the main pannel
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        setBackground(Theme.COLOR_BEIGE);
-
         //sub jpannel with the login UI
         JPanel newRoomPanel = new JPanel(new GridLayout(12, 1, 0, 0));
         newRoomPanel.setBackground(Theme.COLOR_BEIGE);
@@ -478,7 +624,7 @@ public class AdminUI extends JPanel {
 
         // Space
         //label
-        newRoomPanel.add(UIFactory.createLabel("Role: ", Color.black, Theme.FONT_SERIF_BOLD));
+        newRoomPanel.add(UIFactory.createLabel("Room Space: ", Color.black, Theme.FONT_SERIF_BOLD));
         //combobox options
         newRoomSpaceField = UIFactory.createComboBox(new String[]{"Single", "Double"});
         newRoomPanel.add(newRoomSpaceField);
@@ -488,7 +634,7 @@ public class AdminUI extends JPanel {
 
         // Price
         //label
-        newRoomPanel.add(UIFactory.createLabel("Price: ", Color.black, Theme.FONT_SERIF_BOLD));
+        newRoomPanel.add(UIFactory.createLabel("Room Price: ", Color.black, Theme.FONT_SERIF_BOLD));
         //inputField
         newRoomPriceField = new JTextField(20);
         UIFactory.styleTextField(newRoomPriceField);
@@ -509,10 +655,119 @@ public class AdminUI extends JPanel {
         return newRoomPanel;
     }
 
+    // edit Room tab
+    public JPanel createEditRoomTab(Room room){
+        JPanel editRoomPanel = new JPanel(new GridLayout(20, 1, 0, 0));
+        editRoomPanel.setBackground(Theme.COLOR_BEIGE);
+        editRoomPanel.setBorder(UIFactory.createPadding(30));
+
+        // Room ID
+        //label
+        editRoomPanel.add(UIFactory.createLabel("Room ID: ", Color.black, Theme.FONT_SERIF_BOLD));
+        //combobox options
+        editRoomIdField = new JTextField(20);
+        editRoomIdField.setText(String.valueOf(room.roomId()));
+        editRoomIdField.setEditable(false);
+        UIFactory.styleTextField(editRoomIdField);
+        editRoomPanel.add(editRoomIdField);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 10));
+
+        // Tier
+        //label
+        editRoomPanel.add(UIFactory.createLabel("Room Tier: ", Color.black, Theme.FONT_SERIF_BOLD));
+        //combobox options
+        editRoomTierField = UIFactory.createComboBox(new String[]{"Standard", "Premium"});
+        editRoomTierField.setSelectedItem(room.tier());
+        editRoomPanel.add(editRoomTierField);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 10));
+
+        // Space
+        // Label
+        editRoomPanel.add(UIFactory.createLabel("Room Space: ", Color.black, Theme.FONT_SERIF_BOLD));
+
+        //combobox options
+        editRoomSpaceField = UIFactory.createComboBox(new String[]{"Single", "Double"});
+        editRoomSpaceField.setSelectedItem(room.space());
+        editRoomPanel.add(editRoomSpaceField);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 10));
+
+        // Status
+        //label
+        editRoomPanel.add(UIFactory.createLabel("Room Status: ", Color.black, Theme.FONT_SERIF_BOLD));
+        //combobox options
+        editRoomStatusField = UIFactory.createComboBox(new String[]{"Ready", "Booked", "Need Cleaning", "Maintenance"});
+        editRoomStatusField.setSelectedItem(room.status());
+        editRoomPanel.add(editRoomStatusField);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 10));
+
+        // Price
+        //label
+        editRoomPanel.add(UIFactory.createLabel("Room Price: ", Color.black, Theme.FONT_SERIF_BOLD));
+        //inputField
+        editRoomPriceField = new JTextField(20);
+        editRoomPriceField.setText(String.format("%.2f", room.price()));
+        UIFactory.styleTextField(editRoomPriceField);
+        editRoomPanel.add(editRoomPriceField);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 10));
+
+        saveEditRoomBtn = UIFactory.createButton("Save Room", Theme.COLOR_BEIGE, Theme.COLOR_GREEN);
+        editRoomPanel.add(saveEditRoomBtn);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 20));
+
+        removeRoomBtn = UIFactory.createButton("Remove Room", Theme.COLOR_BEIGE, Theme.COLOR_RED);
+        editRoomPanel.add(removeRoomBtn);
+
+        // create whitespace in between
+        editRoomPanel.add(UIFactory.createSpace(0, 10));
+
+        backToRoomBtn = UIFactory.createButton("Go Back", Theme.COLOR_RED, Theme.COLOR_BEIGE);
+        editRoomPanel.add(backToRoomBtn);
+
+        return editRoomPanel;
+    }
+
     // create customerTab
     public JPanel createCustomerTab(List<CustomerRecord> customerRecords){
         JPanel customerPanel = new JPanel();
         customerPanel.setLayout(new BoxLayout(customerPanel, BoxLayout.Y_AXIS));
+
+        // add filter / search row
+        JPanel searchPanel = new JPanel(new GridLayout(1, 9, 5, 0));
+        searchPanel.setBorder(UIFactory.createPadding(5));
+        searchPanel.setBackground(Theme.COLOR_BEIGE);
+        // push the saerch/filter componenets to right
+        // create space between filter and search
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        searchPanel.add(UIFactory.createSpace(100, 0));
+        // add search
+        custSearchField = new JTextField(20);
+        UIFactory.styleTextField(custSearchField);
+        custSearchField.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(custSearchField);
+        // select search type
+        customerSearchTypeField = UIFactory.createComboBox(new String[]{"Customer", "RecordID", "Check-In", "Check-Out"});
+        customerSearchTypeField.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(customerSearchTypeField);
+        // add searchbutton
+        customerSearchButton = UIFactory.createButton("Search", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        customerSearchButton.setFont(Theme.FONT_SERIF_BOLD_SMALL);
+        searchPanel.add(customerSearchButton);
 
         // add top row
         JPanel header = new JPanel(new GridLayout(1, 6, 0, 0));
@@ -527,6 +782,7 @@ public class AdminUI extends JPanel {
         header.add(UIFactory.createLabel("Bill", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
 
         customerPanel.add(header);
+        customerPanel.add(searchPanel);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -580,6 +836,12 @@ public class AdminUI extends JPanel {
     public JButton getCustomerButton(){return this.customerButton;}
 
     // TODO geters for generate report
+
+    // getters for employee search functionality
+    public JTextField getEmpNameSearchField(){ return this.empNameSearchField; }
+    public JButton getEmpSearchButton(){ return this.empSearchButton; }
+    public JComboBox<String> getEmpRoleFilter(){ return this.empRoleFilter; }
+    public JButton getEmpFilterButton(){ return this.empFilterButton; }
     // getters for new employee tab
     public JButton getNewEmployeeTabBtn(){ return this.newEmployeeTabBtn; }
     public JButton getSaveNewEmployeeBtn(){ return this.saveNewEmployeeBtn; }
@@ -588,13 +850,20 @@ public class AdminUI extends JPanel {
     public JTextField getNewEmpPassword(){ return this.newEmpPasswordField; }
     public JComboBox<String> getNewEmpRole(){ return this.newEmpRoleField; }
     // getters for edit employee tab
-    public JButton getEditEmployeeTabBtn(){ return this.editEmployeeTabBtn; }
+    public List<JButton> getEditEmployeeBtns(){ return this.editEmployeeBtns; }
     public JButton getSaveEditEmployeeBtn(){ return this.saveEditEmployeeBtn; }
     public JButton getRemoveEmployeeBtn(){return this.removeEmployeeBtn;}
     public JTextField getEditEmpUsernameField(){ return this.editEmpUsernameField; }
     public JTextField getEditEmpPasswordField(){ return this.editEmpPasswordField; }
     public JComboBox<String> getEditEmpRoleField(){ return this.editEmpRoleField; }
 
+    // getters for room search functionality
+    public JTextField getRoomIdSearchField(){ return this.roomIdSearchField; }
+    public JButton getRoomSearchButton(){ return this.roomSearchButton; }
+    public JComboBox<String> getRoomTierFilter(){return this.roomTierFilter; }
+    public JComboBox<String> getRoomSpaceFilter(){ return this.roomSpaceFilter; }
+    public JComboBox<String> getRoomStatusFilter(){ return this.roomStatusFilter; }
+    public JButton getRoomFilterButton(){ return this.roomFilterButton; }
     // getters for new Room tab
     public JButton getNewRoomTabBtn(){ return this.newRoomTabBtn; }
     public JButton getSaveNewRoomBtn(){ return this.saveNewRoomBtn; }
@@ -603,10 +872,18 @@ public class AdminUI extends JPanel {
     public JComboBox<String> getNewRoomSpaceField(){ return this.newRoomSpaceField; }
     public JTextField getNewRoomPriceField(){ return this.newRoomPriceField; }
     // getters for edit room tab
-    public JButton getEditRoomTabBtn(){ return this.editRoomTabBtn; }
+    public List<JButton> getEditRoomBtns(){ return this.editRoomBtns; }
     public JButton getSaveEditRoomBtn(){ return this.saveEditRoomBtn; }
+    public JButton getRemoveRoomBtn(){ return this.removeRoomBtn; }
+    public JTextField getEditRoomIdField(){ return this.editRoomIdField; }
     public JComboBox<String> getEditRoomTierField(){ return this.editRoomTierField; }
     public JComboBox<String> getEditRoomSpaceField(){ return this.editRoomSpaceField; }
+    public JComboBox<String> getEditRoomStatusField(){ return this.editRoomStatusField; }
     public JTextField getEditRoomPriceField(){ return this.editRoomPriceField; }
+
+    // getters for customerrecord search functionality
+    public JTextField getCustSearchField(){ return this.custSearchField; }
+    public JComboBox<String> getCustomerSearchTypeField(){ return this.customerSearchTypeField; }
+    public JButton getCustomerSearchButton(){ return this.customerSearchButton; }
 
 }

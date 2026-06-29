@@ -4,23 +4,17 @@ import com.hotelapp.util.Theme;
 import com.hotelapp.util.UIFactory;
 import com.hotelapp.util.UIFactory.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.awt.*;
 
 public class LoginUI extends JPanel {
-    private final BaseFrame baseFrame;
-
     // input components
     private final JTextField textUsername;
     private final JPasswordField textPassword;
     private final JCheckBox checkShowPassword;
     private final JButton loginButton;
 
-    public LoginUI(BaseFrame baseFrame){
-        // assign baseFrame so that other methods can use it
-        this.baseFrame = baseFrame;
-
+    public LoginUI(){
         // layout and bgColor for the main pannel
         setLayout(new GridBagLayout());
         setBackground(Theme.COLOR_BEIGE);

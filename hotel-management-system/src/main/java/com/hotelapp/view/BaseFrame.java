@@ -47,8 +47,4 @@ public class BaseFrame extends JFrame{
         mainContainer.revalidate();
         mainContainer.repaint();
     }
-
-    public JButton createButton(String text, Color foreground, Color background){
-        return new JButton();
-    }
 }

@@ -17,7 +17,7 @@ public class Main {
                 BaseFrame baseFrame = new BaseFrame();
 
                 // show login page by default
-                LoginUI loginUI = new LoginUI(baseFrame);
+                LoginUI loginUI = new LoginUI();
                 // instantiate a authmodel object
                 AuthModel authModel = new AuthModel();
                 //

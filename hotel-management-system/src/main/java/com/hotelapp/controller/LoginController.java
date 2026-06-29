@@ -51,7 +51,7 @@ public class LoginController {
         {
             if (role.equals("Admin"))
             {
-                AdminUI adminView = new AdminUI(baseFrame, username);
+                AdminUI adminView = new AdminUI(username);
                 AdminModel adminModel = new AdminModel();
                 new AdminController(adminView, adminModel); // Attaches the listeners
 
