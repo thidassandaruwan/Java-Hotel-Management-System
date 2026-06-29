@@ -552,19 +552,8 @@ public class AdminUI extends JPanel {
         roomFilterButton.setFont(Theme.FONT_SERIF_BOLD_SMALL);
         searchPanel.add(roomFilterButton);
 
-        // add top row
-        JPanel header = new JPanel(new GridLayout(1, 5, 0, 0));
-        header.setBackground(Theme.COLOR_GREY);
-        header.setBorder(UIFactory.createPadding(10));
-        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-        header.add(UIFactory.createLabel("Room ID", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Size", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Tier", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Status", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        this.newRoomTabBtn = UIFactory.createButton("Add New Room", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
-        header.add(this.newRoomTabBtn);
-
-        roomPannel.add(header);
+        // creates header
+        roomPannel.add(UIFactory.createsHeaderRow(new String[]{"Room ID", "Size", "Tier", "Status", "Change Status"}));
         roomPannel.add(searchPanel);
 
         JPanel contentPanel = new JPanel();
@@ -775,18 +764,7 @@ public class AdminUI extends JPanel {
         searchPanel.add(customerSearchButton);
 
         // add top row
-        JPanel header = new JPanel(new GridLayout(1, 6, 0, 0));
-        header.setBackground(Theme.COLOR_GREY);
-        header.setBorder(UIFactory.createPadding(10));
-        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-        header.add(UIFactory.createLabel("Custmer ID", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Customer Name", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Room ID", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Check-in Date", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Check-out Date", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-        header.add(UIFactory.createLabel("Bill", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
-
-        customerPanel.add(header);
+        customerPanel.add(UIFactory.createsHeaderRow(new String[]{"Custmer ID", "Customer Name", "Room ID", "Check-in Date", "Check-out Date", "Bill"}));
         customerPanel.add(searchPanel);
 
         JPanel contentPanel = new JPanel();

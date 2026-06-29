@@ -112,4 +112,18 @@ public class UIFactory {
 
         return checkShowPassword;
     }
+
+    public static JPanel createsHeaderRow(String[] headings){
+        JPanel header = new JPanel(new GridLayout(1, headings.length, 0, 0));
+        header.setBackground(Theme.COLOR_GREY);
+        header.setBorder(UIFactory.createPadding(10));
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+
+        for (String heading:headings)
+        {
+            header.add(UIFactory.createLabel(heading, Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
+        }
+
+        return header;
+    }
 }

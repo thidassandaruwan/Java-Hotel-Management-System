@@ -2,9 +2,11 @@ package com.hotelapp.controller;
 
 import com.hotelapp.model.AuthModel;
 import com.hotelapp.model.AdminModel;
+import com.hotelapp.model.ReceptionModel;
 import com.hotelapp.view.AdminUI;
 import com.hotelapp.view.BaseFrame;
 import com.hotelapp.view.LoginUI;
+import com.hotelapp.view.ReceptionUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,7 +61,12 @@ public class LoginController {
             }
             else if(role.equals("Receptionist"))
             {
-                // TODO: display receptionist dashboard
+                ReceptionUI receptionView = new ReceptionUI(username);
+                ReceptionModel receptionModel = new ReceptionModel();
+                new ReceptionController(receptionView, receptionModel);
+
+
+                baseFrame.setView(receptionView, "Reception Dashboard");
             }
             else
             {
