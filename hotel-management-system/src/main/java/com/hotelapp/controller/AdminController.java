@@ -40,20 +40,28 @@ public class AdminController {
         view.getEmployeeButton().addActionListener(e -> {
             List<Employee> employees = model.getAllEmployees();
             view.updateMainPanel(view.createEmployeeTab(employees));
+            // setup navigation listeners
             setupEmployeeTabNavigationListeners();
+            // setup filter seach action listeners
+            setupEmployeeSearchAndFilter();
         });
 
         // roomButton actionlistner
         view.getRoomButton().addActionListener(e -> {
             List<Room> rooms = model.getAllRooms();
             view.updateMainPanel(view.createRoomTab(rooms));
+            // setup navigation listeners
             setupRoomTabNavigationListeners();
+            // setup filter seach action listeners
+            setupRoomSearchAndFilter();
         });
 
         // Customer button actionlistner
         view.getCustomerButton().addActionListener(e -> {
             List<CustomerRecord> customerRecords = model.getAllCustomerRecords();
             view.updateMainPanel(view.createCustomerTab(customerRecords));
+            // setup filter seach action listeners
+            setupCustomerSearch();
         });
     }
 
@@ -81,6 +89,49 @@ public class AdminController {
                 });
             }
         }
+    }
+
+    private void setupEmployeeSearchAndFilter() {
+        // Employee SEARCH Button
+        view.getEmpSearchButton().addActionListener(e -> {
+            String keyword = view.getEmpNameSearchField().getText();
+            // since filtering and searching handles by the same databasemodel method, ignoring filter field by forcing "any" role
+            String role = "Any";
+
+            // Fetch filtered data
+            List<Employee> results = model.getFilteredEmployees(keyword, role);
+
+            // Refresh UI
+            view.updateMainPanel(view.createEmployeeTab(results));
+
+            // Restore the search text, and reset the filter dropdown
+            view.getEmpNameSearchField().setText(keyword);
+            view.getEmpRoleFilter().setSelectedItem("Any");
+
+            // Re-bind listeners
+            setupEmployeeTabNavigationListeners();
+            setupEmployeeSearchAndFilter();
+        });
+
+        // 2. Employee FILTER Button (Role Only)
+        view.getEmpFilterButton().addActionListener(e -> {
+            String keyword = ""; // Force search to empty
+            String role = (String) view.getEmpRoleFilter().getSelectedItem();
+
+            // Fetch filtered data
+            List<Employee> results = model.getFilteredEmployees(keyword, role);
+
+            // Refresh UI
+            view.updateMainPanel(view.createEmployeeTab(results));
+
+            // CLEAR the search text box, but restore the filter dropdown
+            view.getEmpNameSearchField().setText("");
+            view.getEmpRoleFilter().setSelectedItem(role);
+
+            // Re-bind listeners
+            setupEmployeeTabNavigationListeners();
+            setupEmployeeSearchAndFilter();
+        });
     }
 
     private void setupNewEmployeeFormListeners(){
@@ -207,6 +258,47 @@ public class AdminController {
         }
     }
 
+    private void setupRoomSearchAndFilter() {
+        // search button
+        view.getRoomSearchButton().addActionListener(e -> {
+            String keyword = view.getRoomIdSearchField().getText();
+            // Pass "Any" to all filters to ignore them
+            List<Room> results = model.getFilteredRooms(keyword, "Any", "Any", "Any");
+
+            view.updateMainPanel(view.createRoomTab(results));
+
+            // Restore search input, RESET all dropdowns
+            view.getRoomIdSearchField().setText(keyword);
+            view.getRoomTierFilter().setSelectedItem("Any");
+            view.getRoomSpaceFilter().setSelectedItem("Any");
+            view.getRoomStatusFilter().setSelectedItem("Any");
+
+            setupRoomTabNavigationListeners();
+            setupRoomSearchAndFilter();
+        });
+
+        // Room FILTER Button (Dropdowns Only)
+        view.getRoomFilterButton().addActionListener(e -> {
+            String tier = (String) view.getRoomTierFilter().getSelectedItem();
+            String space = (String) view.getRoomSpaceFilter().getSelectedItem();
+            String status = (String) view.getRoomStatusFilter().getSelectedItem();
+
+            // Pass empty string to the ID search to ignore it
+            List<Room> results = model.getFilteredRooms("", tier, space, status);
+
+            view.updateMainPanel(view.createRoomTab(results));
+
+            // CLEAR search input, restore dropdown selections
+            view.getRoomIdSearchField().setText("");
+            view.getRoomTierFilter().setSelectedItem(tier);
+            view.getRoomSpaceFilter().setSelectedItem(space);
+            view.getRoomStatusFilter().setSelectedItem(status);
+
+            setupRoomTabNavigationListeners();
+            setupRoomSearchAndFilter();
+        });
+    }
+
     private void setupNewRoomFormActionListeners(){
         view.getBackToRoomBtn().addActionListener(e -> {
             view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
@@ -307,6 +399,27 @@ public class AdminController {
                     JOptionPane.showMessageDialog(null, "Error: Cannot remove a room that has customer records associated with it.");
                 }
             }
+        });
+    }
+
+    // customer search controller
+    private void setupCustomerSearch() {
+        view.getCustomerSearchButton().addActionListener(e -> {
+            String keyword = view.getCustSearchField().getText();
+            String type = (String) view.getCustomerSearchTypeField().getSelectedItem();
+
+            // Fetch filtered data
+            List<CustomerRecord> results = model.searchCustomerRecords(type, keyword);
+
+            // Refresh UI
+            view.updateMainPanel(view.createCustomerTab(results));
+
+            // Restore inputs
+            view.getCustSearchField().setText(keyword);
+            view.getCustomerSearchTypeField().setSelectedItem(type);
+
+            // Re-bind listener
+            setupCustomerSearch();
         });
     }
 }

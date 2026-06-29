@@ -317,6 +317,7 @@ public class AdminUI extends JPanel {
         // add filter / search row
         JPanel searchPanel = new JPanel(new GridLayout(1, 9, 5, 0));
         searchPanel.setBorder(UIFactory.createPadding(5));
+        searchPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         searchPanel.setBackground(Theme.COLOR_BEIGE);
         // add search
         empNameSearchField = new JTextField(20);
@@ -346,7 +347,7 @@ public class AdminUI extends JPanel {
         JPanel header = new JPanel(new GridLayout(1, 3, 0, 0));
         header.setBackground(Theme.COLOR_GREY);
         header.setBorder(UIFactory.createPadding(10));
-
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         header.add(UIFactory.createLabel("Employee Name", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
         header.add(UIFactory.createLabel("Employee Role", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
         this.newEmployeeTabBtn = UIFactory.createButton("Add New Employee", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
@@ -365,7 +366,8 @@ public class AdminUI extends JPanel {
             contentPanel.add(createEmployeeRow(employee));
             contentPanel.add(UIFactory.createSpace(0, 10));
         }
-
+        // creates soaks up all empty space if there are little rows to show much white space left. Prevent from weird element resizings
+        contentPanel.add(Box.createVerticalGlue());
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
 
@@ -380,7 +382,7 @@ public class AdminUI extends JPanel {
         JPanel row = new JPanel(new GridLayout(1, 3, 0, 0));
         row.setBackground(Theme.COLOR_BEIGE);
         row.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
-
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         row.add(UIFactory.createLabel(employee.username(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(employee.role(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
 
@@ -518,6 +520,7 @@ public class AdminUI extends JPanel {
         // add filter / search row
         JPanel searchPanel = new JPanel(new GridLayout(1, 9, 5, 0));
         searchPanel.setBorder(UIFactory.createPadding(5));
+        searchPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         searchPanel.setBackground(Theme.COLOR_BEIGE);
         // add search
         roomIdSearchField = new JTextField(20);
@@ -553,7 +556,7 @@ public class AdminUI extends JPanel {
         JPanel header = new JPanel(new GridLayout(1, 5, 0, 0));
         header.setBackground(Theme.COLOR_GREY);
         header.setBorder(UIFactory.createPadding(10));
-
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         header.add(UIFactory.createLabel("Room ID", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
         header.add(UIFactory.createLabel("Size", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
         header.add(UIFactory.createLabel("Tier", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
@@ -572,7 +575,8 @@ public class AdminUI extends JPanel {
             contentPanel.add(createRoomRow(room));
             contentPanel.add(UIFactory.createSpace(0, 10));
         }
-
+        // creates soaks up all empty space if there are little rows to show much white space left. Prevent from weird element resizings
+        contentPanel.add(Box.createVerticalGlue());
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
 
@@ -588,7 +592,7 @@ public class AdminUI extends JPanel {
         JPanel row = new JPanel(new GridLayout(1, 5, 0, 0));
         row.setBackground(Theme.COLOR_BEIGE);
         row.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
-
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         row.add(UIFactory.createLabel(String.valueOf(room.roomId()), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(room.space(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(room.tier(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
@@ -746,6 +750,7 @@ public class AdminUI extends JPanel {
         // add filter / search row
         JPanel searchPanel = new JPanel(new GridLayout(1, 9, 5, 0));
         searchPanel.setBorder(UIFactory.createPadding(5));
+        searchPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         searchPanel.setBackground(Theme.COLOR_BEIGE);
         // push the saerch/filter componenets to right
         // create space between filter and search
@@ -773,7 +778,7 @@ public class AdminUI extends JPanel {
         JPanel header = new JPanel(new GridLayout(1, 6, 0, 0));
         header.setBackground(Theme.COLOR_GREY);
         header.setBorder(UIFactory.createPadding(10));
-
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         header.add(UIFactory.createLabel("Custmer ID", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
         header.add(UIFactory.createLabel("Customer Name", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
         header.add(UIFactory.createLabel("Room ID", Theme.COLOR_BLUE, Theme.FONT_SERIF_BOLD));
@@ -794,6 +799,9 @@ public class AdminUI extends JPanel {
             contentPanel.add(UIFactory.createSpace(0, 10));
         }
 
+        // creates soaks up all empty space if there are little rows to show much white space left. Prevent from weird element resizings
+        contentPanel.add(Box.createVerticalGlue());
+
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
 
@@ -809,7 +817,7 @@ public class AdminUI extends JPanel {
         JPanel row = new JPanel(new GridLayout(1, 6, 0, 0));
         row.setBackground(Theme.COLOR_BEIGE);
         row.setBorder(BorderFactory.createCompoundBorder(UIFactory.createBorder(Theme.COLOR_BLUE, 2, true), UIFactory.createPadding(10)));
-
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         row.add(UIFactory.createLabel(String.valueOf(customerRecord.recordId()), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(customerRecord.custName(), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
         row.add(UIFactory.createLabel(String.valueOf(customerRecord.roomId()), Theme.COLOR_BLUE, Theme.FONT_SERIF_PLAIN));
