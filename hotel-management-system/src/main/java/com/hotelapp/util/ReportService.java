@@ -29,7 +29,7 @@ public class ReportService {
             // if report loaded
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, new HashMap<>(), conn);
             // display the jasperPRint
-            JasperViewer.viewReport(jasperPrint);
+            JasperViewer.viewReport(jasperPrint, false);// prevet the whole program from closeing when jasper report window is closed
         }
         // exception for both SQL database and jasper report fillReport JRException
         catch (Exception exception){
