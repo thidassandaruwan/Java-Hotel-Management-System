@@ -43,6 +43,7 @@
 * RED : #cc0000
 * Green : #79c139
 
+### UI Mockups
 #### LoginPage
 ![Login UI page](UI_design/LoginUI.png)
 

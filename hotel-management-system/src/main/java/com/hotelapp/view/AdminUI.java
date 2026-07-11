@@ -821,7 +821,10 @@ public class AdminUI extends JPanel {
     public JButton getRoomButton(){return this.roomButton;}
     public JButton getCustomerButton(){return this.customerButton;}
 
-    // TODO geters for generate report
+    // dashboard
+    public JButton getTodayReportBtn(){ return this.todayReportBtn; }
+    public JButton getMonthlyReportBtn(){ return this.monthlyReportBtn; }
+
 
     // getters for employee search functionality
     public JTextField getEmpNameSearchField(){ return this.empNameSearchField; }
