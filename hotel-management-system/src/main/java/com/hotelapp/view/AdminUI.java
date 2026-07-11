@@ -553,7 +553,12 @@ public class AdminUI extends JPanel {
         searchPanel.add(roomFilterButton);
 
         // creates header
-        roomPannel.add(UIFactory.createsHeaderRow(new String[]{"Room ID", "Size", "Tier", "Status", "Change Status"}));
+        JPanel headerPanel = UIFactory.createsHeaderRow(new String[]{"Room ID", "Size", "Tier", "Status", "Change Status"});
+        this.newRoomTabBtn = UIFactory.createButton("Add New Room", Theme.COLOR_BEIGE, Theme.COLOR_BLUE);
+        headerPanel.add(this.newRoomTabBtn);
+
+        // add headerpanel and searchpanel
+        roomPannel.add(headerPanel);
         roomPannel.add(searchPanel);
 
         JPanel contentPanel = new JPanel();

@@ -114,7 +114,8 @@ public class UIFactory {
     }
 
     public static JPanel createsHeaderRow(String[] headings){
-        JPanel header = new JPanel(new GridLayout(1, headings.length, 0, 0));
+                                                            // extra column for new room button
+        JPanel header = new JPanel(new GridLayout(1, (headings.length + 1), 0, 0));
         header.setBackground(Theme.COLOR_GREY);
         header.setBorder(UIFactory.createPadding(10));
         header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
