@@ -5,8 +5,8 @@
 * optional functionality
 * ~~create UI Designs~~
 * ~~Test and verify :~~ [Test 1](#Test_1)
-* Fix found bugs
-* Test Program
+* ~~Fix found bugs~~
+* ~~Test Program~~ : [Test_2](#Test_2)
 
 ## Program Functionality
 ### Room management
@@ -131,6 +131,77 @@ Verify program functionality
 - successfully book room
 - successfully takes back to book room tab
 ####
+- successfully takes to customerRecord tab
+- successfully search records by customer
+- successfully search records by records
+- successfully search records by check in date
+- successfully search records by check out date
+
+
+## Test_2
+Verify program functionality
+### LoginPage
+- successfully detect missing input
+- successfully detect invalid credentials
+- successfully logs in admin user to admin dashboard
+- successfully logs in reception user to reception dashboard
+#
+### AminUI
+###### Admin Dashboard
+- successfully displays admin dashboard
+- successfully daily stats are not updating
+- successfully displays real time monthly stats
+###### Employee Tab
+- successfully switch to Employee tab
+- successfully search employee
+- successfully filter employee
+- successfully takes to employee modifying form
+- successfully modify employee role
+- successfully modify employee password
+- successfully asks remove employee verification
+- successfully employee not removed when denied verification
+- successfully remove employee
+- successfully takes back to employee page
+- successfully filter and search functionality not working when taken back to employee page
+###### Room Tab
+- successfully switch to room tab
+- successfully search rooms
+- successfully filter rooms
+- successfully takes to new room tab
+- successfully creates a new room
+- successfully takes to room modifying form
+- successfully modify room tier
+- successfully modify room space
+- successfully modify room status
+- successfully modified room price
+- successfully ask for room remove verification
+- successfully remove room
+###### Customer Records
+- successfully takes to customerRecord tab
+- successfully search records by customer
+- successfully search records by records
+- successfully search records by check in date
+- successfully search records by check out date
+#
+#### ReceptionUI
+###### Rooms Tab
+- successfully takes to employee room tab
+- successfully search room
+- successfully filter room by tier
+- successfully filter room by space
+- successfully filter room by status
+- successfully takes to room modifying form
+- successfully modify room status
+- successfully takes back to rooms tab
+###### Room Booking Tab
+- successfully takes to book room tab
+- successfully filter rooms by check in check out date
+- successfully filter rooms by tier
+- successfully filter rooms by space
+- successfully takes to book room form
+- successfully book room
+- successfully takes back to book room tab
+###### Customer Records Tab
 - successfully takes to customerRecord tab
 - successfully search records by customer
 - successfully search records by records
