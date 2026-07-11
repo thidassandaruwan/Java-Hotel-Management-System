@@ -115,6 +115,8 @@ public class ReceptionController {
         // go back actionlisner
         view.getBackToRoomBtn().addActionListener(e -> {
             view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
+
+            // setup actionlistners
             setupRoomTabNavigationListeners();
             setupRoomSearchAndFilter();
         });
@@ -128,7 +130,10 @@ public class ReceptionController {
             if (model.updateRoom(roomId, status)) {
                 JOptionPane.showMessageDialog(null, "Room updated successfully!");
                 view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
+
+                // setup actionlistners
                 setupRoomTabNavigationListeners();
+                setupRoomSearchAndFilter();
             } else {
                 JOptionPane.showMessageDialog(null, "Error updating room.");
             }

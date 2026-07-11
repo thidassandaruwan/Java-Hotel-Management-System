@@ -224,7 +224,10 @@ public class AdminController {
                 if (model.updateEmployee(updatedEmp)) {
                     JOptionPane.showMessageDialog(null, "Employee updated successfully!");
                     view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
+
+                    // setup actionlistners
                     setupEmployeeTabNavigationListeners();
+                    setupEmployeeSearchAndFilter();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error updating employee.");
                 }
@@ -246,7 +249,10 @@ public class AdminController {
                 if (model.deleteEmployee(username)) {
                     JOptionPane.showMessageDialog(null, "Employee removed.");
                     view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
+
+                    // setup actionlistners
                     setupEmployeeTabNavigationListeners();
+                    setupEmployeeSearchAndFilter();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error removing employee.");
                 }
@@ -397,6 +403,7 @@ public class AdminController {
                         JOptionPane.showMessageDialog(null, "Room updated successfully!");
                         view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
                         setupRoomTabNavigationListeners();
+                        setupRoomSearchAndFilter();
                     } else {
                         JOptionPane.showMessageDialog(null, "Error updating room.");
                     }
@@ -421,6 +428,7 @@ public class AdminController {
                     JOptionPane.showMessageDialog(null, "Room removed.");
                     view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
                     setupRoomTabNavigationListeners();
+                    setupRoomSearchAndFilter();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error: Cannot remove a room that has customer records associated with it.");
                 }
