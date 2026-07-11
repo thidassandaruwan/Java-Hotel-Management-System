@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class DatabaseHelper {
     // create dotEnv object to load database login details from .env
-    private static final Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\Thidas\\IdeaProjects\\EAD_coursework\\hotel-management-system\\.env").load();
+    private static final Dotenv dotenv = Dotenv.load();
     // Aiven database "login" details
     private static final String HOST = dotenv.get("DB_HOST");
     private static final String PORT = dotenv.get("DB_PORT");
