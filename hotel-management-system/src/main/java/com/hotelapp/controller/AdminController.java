@@ -1,7 +1,9 @@
 package com.hotelapp.controller;
 
 import com.hotelapp.model.*;
+import com.hotelapp.util.ReportService;
 import com.hotelapp.view.AdminUI;
+import com.hotelapp.util.ReportService.*;
 
 import javax.swing.*;
 import java.util.List;
@@ -30,6 +32,25 @@ public class AdminController {
 
         // update the dashboard metrics data
         view.updateDashboardMetrics(dailyStats, monthlyStats);
+
+        // report generation functinality
+        // daily reports
+        if (view.getTodayReportBtn() != null)
+        {
+            view.getTodayReportBtn().addActionListener(e ->{
+                // call the report generat method with daily sales report jasper file
+                ReportService.generateReport("/reports/hotel-daily-sales-reports.jasper");
+            });
+        }
+
+        // monthly reports
+        if (view.getMonthlyReportBtn() != null)
+        {
+            view.getMonthlyReportBtn().addActionListener(e ->{
+                // call the report generat method with daily sales report jasper file
+                ReportService.generateReport("/reports/hotel-monthly-sales-reports.jasper");
+            });
+        }
     }
 
     private void setupSidePanelNavigationListners(){
