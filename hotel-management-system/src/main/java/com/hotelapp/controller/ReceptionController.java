@@ -116,6 +116,7 @@ public class ReceptionController {
         view.getBackToRoomBtn().addActionListener(e -> {
             view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
             setupRoomTabNavigationListeners();
+            setupRoomSearchAndFilter();
         });
 
         // save room button

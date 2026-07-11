@@ -160,6 +160,7 @@ public class AdminController {
             view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
             // rebind the navigation buttons in employee tab
             setupEmployeeTabNavigationListeners();
+            setupEmployeeSearchAndFilter();
         });
 
         // Handle 'Save Employee'
@@ -204,6 +205,7 @@ public class AdminController {
         view.getBackToEmployeesBtn().addActionListener(e -> {
             view.updateMainPanel(view.createEmployeeTab(model.getAllEmployees()));
             setupEmployeeTabNavigationListeners();
+            setupEmployeeSearchAndFilter();
         });
 
         // save employee
@@ -324,7 +326,8 @@ public class AdminController {
         view.getBackToRoomBtn().addActionListener(e -> {
             view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
             // rebind the navigation buttons in employee tab
-            setupEditRoomFormListeners();
+            setupRoomTabNavigationListeners();
+            setupRoomSearchAndFilter();
         });
 
         // adding new rooms
@@ -372,7 +375,9 @@ public class AdminController {
         // go back actionlisner
         view.getBackToRoomBtn().addActionListener(e -> {
             view.updateMainPanel(view.createRoomTab(model.getAllRooms()));
+
             setupRoomTabNavigationListeners();
+            setupRoomSearchAndFilter();
         });
 
         // save room button
